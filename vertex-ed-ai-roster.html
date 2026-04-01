@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vertex Ed — AI Roster</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --vertex-navy: #1a3560;
+  --vertex-mid: #2a4f8a;
+  --vertex-light: #3d6db5;
+  --ot-orange: #f5a623;
+  --ot-coral: #e8735a;
+  --ot-blue: #4a7fd4;
+  --ot-purple: #8b6fd4;
+  --nebari-teal: #00b4a0;
+  --nebari-purple: #9b5de5;
+  --nebari-yellow: #f5c518;
+  --bg: #eef2f8;
+  --surface: #ffffff;
+  --surface-2: #f6f8fc;
+  --border: #dde4ef;
+  --border-strong: #b8c5d9;
+  --text-primary: #0f1f38;
+  --text-secondary: #4a5f7a;
+  --text-muted: #8a9ab5;
+  --flag: #c0392b;
+  --flag-light: #fdf0ef;
+  --warn: #d4730a;
+  --warn-light: #fef6ec;
+  --success: #1a7a4a;
+  --success-light: #e8f7ef;
+  --info: #1a5490;
+  --info-light: #e8f0fb;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);min-height:100vh;font-size:13px;}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--vertex-navy);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:58px;position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(10,25,55,0.3);}
+.topbar-brand{display:flex;align-items:center;gap:14px;}
+.brand-divider{width:1px;height:26px;background:rgba(255,255,255,0.18);}
+.product-label{font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:.12em;text-transform:uppercase;}
+.topbar-right{display:flex;align-items:center;gap:14px;}
+.powered-by{display:flex;align-items:center;gap:8px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:.06em;text-transform:uppercase;}
+.partner-badge{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:5px;padding:4px 10px;}
+.badge-name{font-size:11px;font-weight:700;color:rgba(255,255,255,0.75);}
+.status-live{display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.reset-btn{display:flex;align-items:center;gap:5px;padding:6px 13px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:6px;color:rgba(255,255,255,0.65);font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;}
+.reset-btn:hover{background:rgba(255,255,255,0.16);color:#fff;}
+
+/* ── TAB NAV ── */
+.tab-nav{background:var(--vertex-navy);border-top:1px solid rgba(255,255,255,0.07);display:flex;padding:0 24px;gap:2px;}
+.tab-btn{display:flex;align-items:center;gap:7px;padding:11px 18px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,0.42);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;transition:all .2s;letter-spacing:.01em;}
+.tab-btn:hover{color:rgba(255,255,255,0.72);}
+.tab-btn.active{color:#fff;border-bottom-color:var(--ot-orange);}
+.tab-pill{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;letter-spacing:.05em;}
+.tab-pill.full{background:var(--nebari-teal);color:#fff;}
+.tab-pill.lite{background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.7);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── SHELL ── */
+.shell{max-width:1400px;margin:0 auto;padding:26px 24px 48px;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;border:none;white-space:nowrap;}
+.btn-primary{background:var(--vertex-navy);color:#fff;}
+.btn-primary:hover{background:var(--vertex-mid);transform:translateY(-1px);box-shadow:0 4px 14px rgba(26,53,96,.3);}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-outline{background:var(--surface);color:var(--text-secondary);border:1px solid var(--border-strong);}
+.btn-outline:hover{border-color:var(--vertex-mid);color:var(--vertex-mid);}
+.btn-outline:disabled{opacity:.45;cursor:not-allowed;}
+.btn-danger{background:var(--flag);color:#fff;}
+.btn-danger:hover{background:#a93226;transform:translateY(-1px);}
+.btn-success{background:var(--success);color:#fff;}
+.btn-success:hover{background:#145e38;transform:translateY(-1px);}
+.btn-teal{background:var(--nebari-teal);color:#fff;}
+.btn-teal:hover{background:#009987;transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,180,160,.3);}
+.btn-teal:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+.btn-sm{padding:7px 14px;font-size:11px;}
+.btn-xs{padding:4px 9px;font-size:10px;border-radius:5px;}
+
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:20px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:15px 17px;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.stat-card.red::before{background:var(--flag);}
+.stat-card.amber::before{background:var(--warn);}
+.stat-card.green::before{background:var(--success);}
+.stat-card.blue::before{background:var(--vertex-light);}
+.stat-card.navy::before{background:var(--vertex-navy);}
+.stat-card.teal::before{background:var(--nebari-teal);}
+.stat-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text-muted);margin-bottom:7px;}
+.stat-value{font-size:28px;font-weight:800;letter-spacing:-.04em;line-height:1;}
+.stat-value.red{color:var(--flag);}
+.stat-value.amber{color:var(--warn);}
+.stat-value.green{color:var(--success);}
+.stat-value.blue{color:var(--vertex-light);}
+.stat-value.navy{color:var(--vertex-navy);}
+.stat-value.teal{color:var(--nebari-teal);}
+.stat-meta{font-size:10px;color:var(--text-muted);margin-top:5px;font-family:'DM Mono',monospace;}
+
+/* ── PANEL ── */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+.panel:last-child{margin-bottom:0;}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:13px 17px;border-bottom:1px solid var(--border);background:var(--surface-2);gap:10px;flex-wrap:wrap;}
+.panel-title{font-size:12px;font-weight:700;display:flex;align-items:center;gap:7px;letter-spacing:.01em;}
+.panel-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+
+/* ── BADGE ── */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.04em;text-transform:uppercase;}
+.badge.red{background:var(--flag-light);color:var(--flag);}
+.badge.amber{background:var(--warn-light);color:var(--warn);}
+.badge.green{background:var(--success-light);color:var(--success);}
+.badge.blue{background:var(--info-light);color:var(--info);}
+.badge.navy{background:#e8ecf5;color:var(--vertex-navy);}
+.badge.teal{background:#e0faf7;color:var(--nebari-teal);}
+
+/* ── TABLE ── */
+.data-table{width:100%;border-collapse:collapse;}
+.data-table th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text-muted);padding:9px 13px;border-bottom:1px solid var(--border);background:var(--surface-2);white-space:nowrap;}
+.data-table td{padding:10px 13px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr{transition:background .12s;}
+.data-table tr:hover td{background:var(--surface-2);}
+.data-table tr.flagged td{background:#fff8f8;}
+.data-table tr.flagged:hover td{background:var(--flag-light);}
+.student-name{font-weight:600;font-size:12px;}
+.school-loc{font-size:10px;color:var(--text-secondary);font-family:'DM Mono',monospace;}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot.red{background:var(--flag);}
+.dot.amber{background:var(--warn);}
+.dot.green{background:var(--success);}
+.dot.teal{background:var(--nebari-teal);}
+.mono{font-family:'DM Mono',monospace;font-size:11px;}
+.mono.red{color:var(--flag);font-weight:500;}
+.mono.amber{color:var(--warn);}
+.mono.green{color:var(--success);}
+
+/* ══════════════════════════════════════════
+   ANIMATED PIPELINE CANVAS
+══════════════════════════════════════════ */
+.pipeline-section{background:linear-gradient(135deg,#0d2040 0%,#1a3560 60%,#0f2848 100%);border-radius:14px;padding:22px 24px 20px;margin-bottom:20px;position:relative;overflow:hidden;}
+.pipeline-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(0,180,160,.08) 0%,transparent 60%);pointer-events:none;}
+.pipeline-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:12px;flex-wrap:wrap;}
+.pipeline-title-row{display:flex;align-items:center;gap:10px;}
+.pipeline-title{font-size:14px;font-weight:800;color:#fff;}
+.nebari-chip{display:inline-flex;align-items:center;gap:5px;background:rgba(0,180,160,.18);border:1px solid rgba(0,180,160,.35);border-radius:5px;padding:3px 9px;font-size:10px;font-weight:700;color:#5df5e5;letter-spacing:.04em;}
+.pipeline-sub{font-size:11px;color:rgba(255,255,255,.45);max-width:500px;}
+.pipeline-canvas-wrap{position:relative;width:100%;height:180px;}
+canvas#pipelineCanvas{width:100%;height:180px;display:block;}
+
+/* ══════════════════════════════════════════
+   MAIN LAYOUT
+══════════════════════════════════════════ */
+.main-grid{display:grid;grid-template-columns:1fr 370px;gap:16px;align-items:start;}
+.right-col{display:flex;flex-direction:column;gap:16px;}
+
+/* ── REVIEW ITEM ── */
+.review-item{padding:14px 17px;border-bottom:1px solid var(--border);transition:background .12s;}
+.review-item:last-child{border-bottom:none;}
+.review-item:hover{background:var(--surface-2);}
+.review-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;flex-wrap:wrap;gap:6px;}
+.review-student{font-size:12px;font-weight:700;}
+.review-change{background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:9px 11px;font-size:11px;font-family:'DM Mono',monospace;color:var(--text-secondary);margin-bottom:9px;line-height:1.65;}
+.change-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:4px;}
+.change-diff{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px;}
+.change-old{color:var(--flag);text-decoration:line-through;}
+.change-arrow{color:var(--text-muted);}
+.change-new{color:var(--success);font-weight:600;}
+.review-actions{display:flex;gap:7px;flex-wrap:wrap;}
+.review-item.approved{opacity:.55;}
+.review-item.approved .review-actions{display:none;}
+.approved-label{display:none;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--success);}
+.review-item.approved .approved-label{display:flex;}
+.review-item.new-item{animation:slideIn .35s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+
+/* ── LOG ── */
+.log-item{display:flex;gap:10px;padding:9px 17px;border-bottom:1px solid var(--border);align-items:flex-start;}
+.log-item:last-child{border-bottom:none;}
+.log-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);white-space:nowrap;min-width:52px;padding-top:2px;}
+.log-text{font-size:11px;color:var(--text-secondary);line-height:1.5;}
+.log-text strong{color:var(--text-primary);font-weight:600;}
+.log-item.new-log{animation:fadeIn .4s ease;background:#f0fff8;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ── INGEST FEED ── */
+.ingest-item{display:flex;align-items:flex-start;gap:11px;padding:12px 17px;border-bottom:1px solid var(--border);transition:background .12s;}
+.ingest-item:last-child{border-bottom:none;}
+.ingest-item:hover{background:var(--surface-2);}
+.ingest-icon{width:34px;height:34px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.ingest-icon.state{background:var(--info-light);}
+.ingest-icon.school{background:var(--success-light);}
+.ingest-body{flex:1;}
+.ingest-title{font-size:12px;font-weight:600;margin-bottom:2px;}
+.ingest-meta{font-size:10px;color:var(--text-muted);font-family:'DM Mono',monospace;margin-bottom:4px;}
+.ingest-status{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-secondary);}
+.pulse-dot{width:7px;height:7px;border-radius:50%;animation:blink 1.6s infinite;}
+.pulse-dot.green{background:var(--success);}
+.pulse-dot.teal{background:var(--nebari-teal);}
+
+/* ── SCHOOLS GRID ── */
+.schools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;padding:14px 17px;}
+.school-card{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:11px 13px;transition:all .25s;}
+.school-card.syncing{border-color:var(--nebari-teal);background:#e0faf7;animation:schoolPulse 1s ease infinite alternate;}
+@keyframes schoolPulse{from{box-shadow:0 0 0 0 rgba(0,180,160,.1)}to{box-shadow:0 0 0 6px rgba(0,180,160,.0)}}
+.school-card.synced{border-color:var(--success);background:var(--success-light);}
+.school-name{font-size:11px;font-weight:700;margin-bottom:2px;}
+.school-state-tag{font-size:9px;color:var(--text-muted);font-family:'DM Mono',monospace;margin-bottom:7px;}
+.school-sync-row{display:flex;align-items:center;gap:4px;font-size:10px;}
+
+/* ── PUSH MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,25,55,.6);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.active{display:flex;}
+.modal{background:var(--surface);border-radius:14px;padding:28px 30px;max-width:480px;width:90%;box-shadow:0 24px 64px rgba(10,25,55,.35);animation:modalIn .25s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.modal-title{font-size:16px;font-weight:800;margin-bottom:6px;}
+.modal-sub{font-size:12px;color:var(--text-secondary);margin-bottom:18px;line-height:1.65;}
+.modal-summary{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:18px;}
+.modal-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);}
+.modal-row:last-child{border-bottom:none;}
+.modal-row-label{color:var(--text-secondary);}
+.modal-row-val{font-weight:600;}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;}
+
+/* Push progress */
+.push-progress{display:none;flex-direction:column;gap:10px;}
+.push-progress.active{display:flex;}
+.progress-track{background:var(--border);border-radius:20px;height:8px;overflow:hidden;margin-bottom:4px;}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--nebari-teal),var(--vertex-light));border-radius:20px;width:0%;transition:width .5s ease;}
+.push-step{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted);padding:2px 0;}
+.push-step.done{color:var(--success);}
+.push-step.active-step{color:var(--vertex-navy);font-weight:600;}
+.step-icon{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;transition:all .2s;}
+.step-icon.done{background:var(--success);border-color:var(--success);color:#fff;}
+.step-icon.active-step{background:var(--vertex-light);border-color:var(--vertex-light);color:#fff;}
+#pushSuccess{display:none;text-align:center;padding:10px 0;}
+/* Toast notification */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text-primary);color:#fff;padding:11px 20px;border-radius:8px;font-size:12px;font-weight:600;z-index:600;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.25);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* Bottom reset bar */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:var(--vertex-navy);border-top:1px solid rgba(255,255,255,.1);padding:12px 28px;display:flex;align-items:center;justify-content:center;gap:14px;z-index:150;box-shadow:0 -4px 24px rgba(10,25,55,.2);}
+.bottom-bar-label{font-size:11px;color:rgba(255,255,255,.45);font-family:'DM Mono',monospace;}
+.bottom-reset-btn{display:flex;align-items:center;gap:7px;padding:9px 22px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:8px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.01em;}
+.bottom-reset-btn:hover{background:rgba(255,255,255,.2);box-shadow:0 0 0 3px rgba(255,255,255,.1);}
+
+/* ══════════════════════════════
+   LITE TAB SPECIFIC
+══════════════════════════════ */
+.scan-bar{display:none;align-items:center;gap:10px;padding:11px 17px;background:var(--info-light);border-bottom:1px solid var(--border);font-size:11px;color:var(--info);font-family:'DM Mono',monospace;}
+.scan-bar.active{display:flex;}
+.spinner{width:13px;height:13px;border:2px solid var(--vertex-light);border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+
+.action-item{padding:13px 17px;border-bottom:1px solid var(--border);transition:background .12s;}
+.action-item:last-child{border-bottom:none;}
+.action-item:hover{background:var(--surface-2);}
+.action-school{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;margin-bottom:4px;}
+.action-reason{font-size:11px;color:var(--text-secondary);line-height:1.5;margin-bottom:8px;}
+.email-preview{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:8px 11px;font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted);line-height:1.6;margin-bottom:9px;}
+.email-preview strong{color:var(--text-secondary);font-weight:500;}
+.action-item.new-action{animation:slideIn .35s ease;}
+.empty{padding:28px 20px;text-align:center;color:var(--text-muted);font-size:11px;font-family:'DM Mono',monospace;}
+
+/* ── PAGE HEADER ── */
+.page-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.page-title{font-size:20px;font-weight:800;letter-spacing:-.02em;}
+.page-sub{font-size:12px;color:var(--text-secondary);margin-top:3px;}
+
+@media(max-width:1100px){
+  .stats-row{grid-template-columns:repeat(3,1fr);}
+  .main-grid{grid-template-columns:1fr;}
+  .schools-grid{grid-template-columns:repeat(2,1fr);}
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+body{padding-bottom:60px;}
+</style>
+</head>
+<body>
+
+<!-- ══ TOPBAR ══ -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <!-- Vertex Education Logo -->
+    <svg height="34" viewBox="0 0 190 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Mountain peaks (M-shape with interior peak) -->
+      <polyline points="6,34 16,10 23,24 30,10 42,34" fill="none" stroke="white" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+      <!-- vertex wordmark -->
+      <text x="52" y="30" font-family="Plus Jakarta Sans,sans-serif" font-weight="800" font-size="23" fill="white" letter-spacing="-0.5">vertex</text>
+      <!-- EDUCATION subtext -->
+      <text x="54" y="41" font-family="Plus Jakarta Sans,sans-serif" font-weight="500" font-size="9.5" fill="rgba(255,255,255,0.45)" letter-spacing="3.5">EDUCATION</text>
+    </svg>
+    <div class="brand-divider"></div>
+    <div class="product-label">AI Roster</div>
+  </div>
+  <div class="topbar-right">
+    <div class="powered-by">
+      <span>Powered by</span>
+      <!-- OpenTeams logo mark -->
+      <div class="partner-badge">
+        <svg width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Top person (orange) -->
+          <circle cx="20" cy="8" r="5" fill="#f5a623"/>
+          <path d="M13 16 Q20 20 27 16" stroke="#f5a623" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Right person (blue) -->
+          <circle cx="32" cy="22" r="5" fill="#4a7fd4"/>
+          <path d="M27 29 Q32 25 37 29" stroke="#4a7fd4" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Bottom person (coral) -->
+          <circle cx="20" cy="34" r="5" fill="#e8735a"/>
+          <path d="M13 34 Q20 38 27 34" stroke="#e8735a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Left person (purple) -->
+          <circle cx="8" cy="22" r="5" fill="#8b6fd4"/>
+          <path d="M3 29 Q8 25 13 29" stroke="#8b6fd4" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span class="badge-name">OpenTeams</span>
+      </div>
+      <!-- Nebari logo mark -->
+      <div class="partner-badge">
+        <svg width="26" height="16" viewBox="0 0 52 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Nebari abstract mark: teal wave + yellow dot + purple swoosh -->
+          <path d="M2 16 Q8 4 14 12 Q20 20 26 10" stroke="#00b4a0" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="36" cy="8" r="5" fill="#f5c518"/>
+          <path d="M38 14 Q44 8 50 16 Q46 22 40 18 Z" fill="#9b5de5"/>
+        </svg>
+        <span class="badge-name">Nebari</span>
+      </div>
+    </div>
+    <div class="status-live"><span class="live-dot"></span>Live</div>
+  </div>
+</div>
+
+<!-- ══ TAB NAV ══ -->
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('full',this)">
+    ⚡ Full Nebari Deployment
+    <span class="tab-pill full">PRIMARY</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('lite',this)">
+    📋 Lite Build
+    <span class="tab-pill lite">STANDARD</span>
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 1: FULL NEBARI DEPLOYMENT
+══════════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-full">
+<div class="shell">
+
+  <div class="page-header">
+    <div>
+      <div class="page-title">Vertex Ed — AI Roster</div>
+      <div class="page-sub">Live state data pipeline · AI reconciliation · Human-confirmed push to school SIS systems · AZ · NV · TX</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" onclick="triggerSync()">🔄 Force Sync</button>
+      <button class="btn btn-outline btn-sm" onclick="approveAll()">✓ Approve All</button>
+      <button class="btn btn-teal btn-sm" id="pushBtn" onclick="openPushModal()">🚀 Push Approved to Schools</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card teal">
+      <div class="stat-label">Pipeline Status</div>
+      <div class="stat-value teal" style="font-size:18px;margin-top:4px;">● Live</div>
+      <div class="stat-meta">last pull 4 min ago</div>
+    </div>
+    <div class="stat-card amber">
+      <div class="stat-label">Pending Review</div>
+      <div class="stat-value amber" id="fStatReview">6</div>
+      <div class="stat-meta">changes detected</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">Approved</div>
+      <div class="stat-value green" id="fStatApproved">0</div>
+      <div class="stat-meta">ready to push</div>
+    </div>
+    <div class="stat-card navy">
+      <div class="stat-label">Schools Online</div>
+      <div class="stat-value navy">7</div>
+      <div class="stat-meta">AZ · NV · TX</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-label">Changes Pushed</div>
+      <div class="stat-value blue" id="fStatPushed">23</div>
+      <div class="stat-meta">this cycle</div>
+    </div>
+  </div>
+
+  <!-- ANIMATED PIPELINE -->
+  <div class="pipeline-section">
+    <div class="pipeline-header">
+      <div class="pipeline-title-row">
+        <div class="pipeline-title">Live Data Pipeline</div>
+        <div class="nebari-chip">
+          <svg width="14" height="9" viewBox="0 0 52 24"><path d="M2 16 Q8 4 14 12 Q20 20 26 10" stroke="#5df5e5" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="36" cy="8" r="5" fill="#f5c518"/><path d="M38 14 Q44 8 50 16 Q46 22 40 18 Z" fill="#c7a0f5"/></svg>
+          Nebari
+        </div>
+      </div>
+      <div class="pipeline-sub">Real-time EL roster data flows from state systems → Nebari normalizes → AI reviews → human confirms → SIS updated</div>
+    </div>
+    <div class="pipeline-canvas-wrap">
+      <canvas id="pipelineCanvas"></canvas>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+    <!-- LEFT -->
+    <div>
+      <!-- REVIEW QUEUE -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">👤 Human Review Queue</div>
+          <div class="panel-actions">
+            <span class="badge amber" id="reviewBadge">6 pending</span>
+            <button class="btn btn-outline btn-xs" onclick="approveAll()">✓ Approve All</button>
+          </div>
+        </div>
+        <div id="reviewQueue"></div>
+      </div>
+
+      <!-- PIPELINE LOG -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">📡 Pipeline Activity Log</div>
+          <span class="badge teal" id="pipeLogBadge">live</span>
+        </div>
+        <ul id="pipelineLog"></ul>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-col">
+      <!-- INGEST FEED -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">⚡ State Ingest Feed</div>
+          <span class="badge teal">● Live</span>
+        </div>
+        <div id="ingestFeed"></div>
+      </div>
+
+      <!-- SCHOOLS GRID -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🏫 Connected School SIS</div>
+          <span class="badge green" id="schoolsBadge">7 / 7 online</span>
+        </div>
+        <div class="schools-grid" id="schoolsGrid"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 2: LITE BUILD
+══════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-lite">
+<div class="shell">
+
+  <div class="page-header">
+    <div>
+      <div class="page-title">Vertex Ed — AI Roster</div>
+      <div class="page-sub">Manual monitoring · State data pulled on-demand · 7 locations · AZ · NV · TX</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" onclick="liteFilter()">🔺 Urgent Only</button>
+      <button class="btn btn-primary btn-sm" id="liteRunBtn" onclick="liteRun()">▶ Run Monitor</button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card navy">
+      <div class="stat-label">Total EL Students</div>
+      <div class="stat-value navy">63</div>
+      <div class="stat-meta">7 locations · 3 states</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">Action Required</div>
+      <div class="stat-value red" id="lStatFlag">4</div>
+      <div class="stat-meta">deadline ≤ 7 days</div>
+    </div>
+    <div class="stat-card amber">
+      <div class="stat-label">Due Soon</div>
+      <div class="stat-value amber">5</div>
+      <div class="stat-meta">8–21 days</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">Reminders Sent</div>
+      <div class="stat-value green" id="lStatSent">11</div>
+      <div class="stat-meta">this month</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-label">Avg Response</div>
+      <div class="stat-value blue">1.4d</div>
+      <div class="stat-meta">coordinator reply</div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">📋 EL Student Roster</div>
+          <div class="panel-actions">
+            <span class="badge red" id="lRosterBadge">4 flagged</span>
+            <button class="btn btn-outline btn-xs" onclick="liteSort()">⇅ Sort by deadline</button>
+            <button class="btn btn-outline btn-xs" onclick="liteFilterReset()">✕ Clear</button>
+          </div>
+        </div>
+        <div class="scan-bar" id="liteScanBar">
+          <div class="spinner"></div>
+          <span id="liteScanMsg">Connecting to state systems...</span>
+        </div>
+        <table class="data-table">
+          <thead><tr>
+            <th></th><th>Student</th><th>Location</th><th>EL Level</th>
+            <th>State Update</th><th>Days to Deadline</th><th>Status</th><th></th>
+          </tr></thead>
+          <tbody id="liteRosterBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">⭐ Pending Reminders</div>
+          <div class="panel-actions">
+            <span class="badge red" id="lPendingBadge">4 queued</span>
+            <button class="btn btn-primary btn-xs" onclick="liteSendAll()">Send All</button>
+          </div>
+        </div>
+        <div id="liteActionList"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🕐 Activity Log</div>
+          <span class="badge navy" id="lLogBadge">11 sent</span>
+        </div>
+        <ul id="liteLogList"></ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══ PUSH MODAL ══ -->
+<div class="modal-overlay" id="pushModal">
+  <div class="modal">
+    <div id="modalContent">
+      <div class="modal-title">🚀 Push Changes to School SIS</div>
+      <div class="modal-sub">The following approved changes will be written directly into each school's student information system via the Nebari API. Review before confirming.</div>
+      <div class="modal-summary" id="modalSummary"></div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-teal" onclick="startPush()">Confirm & Push →</button>
+      </div>
+    </div>
+    <div class="push-progress" id="pushProgress">
+      <div class="modal-title" style="margin-bottom:14px">Pushing to School Systems...</div>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+      <div id="pushSteps" style="margin-top:6px;display:flex;flex-direction:column;gap:6px;"></div>
+    </div>
+    <div id="pushSuccess">
+      <div style="font-size:40px;margin-bottom:12px;">✅</div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:6px;">Push Complete</div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:20px;" id="pushSuccessMsg"></div>
+      <button class="btn btn-teal" style="margin:0 auto;display:flex;" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════
+// DATA
+// ═══════════════════════
+const SCHOOLS=[
+  {id:'chandler',name:'Chandler',state:'AZ',sis:'PowerSchool'},
+  {id:'laveen',name:'Laveen',state:'AZ',sis:'Infinite Campus'},
+  {id:'surprise',name:'Surprise',state:'AZ',sis:'PowerSchool'},
+  {id:'cadence',name:'Cadence',state:'NV',sis:'Skyward'},
+  {id:'swlv',name:'SW Las Vegas',state:'NV',sis:'Infinite Campus'},
+  {id:'alamo',name:'Alamo Ranch',state:'TX',sis:'TEAMS'},
+  {id:'cibolo',name:'Cibolo',state:'TX',sis:'Skyward'},
+];
+
+const STUDENTS=[
+  {name:'Amara Osei',school:'chandler',level:'Emerging',updated:2,deadline:5,status:'urgent'},
+  {name:'Luis Reyes',school:'chandler',level:'Expanding',updated:2,deadline:5,status:'urgent'},
+  {name:'Mei-Ling Chan',school:'laveen',level:'Bridging',updated:8,deadline:6,status:'urgent'},
+  {name:'Priya Nair',school:'laveen',level:'Bridging',updated:14,deadline:4,status:'urgent'},
+  {name:'Fatima Al-Hassan',school:'surprise',level:'Emerging',updated:3,deadline:28,status:'ok'},
+  {name:'Andres Villanueva',school:'surprise',level:'Expanding',updated:3,deadline:30,status:'ok'},
+  {name:'Khalid Osman',school:'cadence',level:'Reaching',updated:5,deadline:18,status:'warn'},
+  {name:'Sofia Herrera',school:'cadence',level:'Emerging',updated:3,deadline:22,status:'ok'},
+  {name:'David Kim',school:'swlv',level:'Expanding',updated:10,deadline:9,status:'warn'},
+  {name:'Nia Johnson',school:'swlv',level:'Bridging',updated:10,deadline:12,status:'warn'},
+  {name:'Carlos Mendoza',school:'alamo',level:'Reaching',updated:2,deadline:35,status:'ok'},
+  {name:'Aisha Traoré',school:'alamo',level:'Emerging',updated:8,deadline:20,status:'ok'},
+  {name:'Marco Reyes',school:'cibolo',level:'Expanding',updated:6,deadline:11,status:'warn'},
+  {name:'Yuki Tanaka',school:'cibolo',level:'Reaching',updated:4,deadline:40,status:'ok'},
+];
+
+const REVIEW_TEMPLATE=[
+  {id:'r1',student:'Amara Osei',school:'chandler',type:'EL Level Update',field:'EL Classification',old:'Emerging (Level 1)',newVal:'Developing (Level 2)',source:'AZ DOE · assessment 3/28'},
+  {id:'r2',student:'Mei-Ling Chan',school:'laveen',type:'Reclassification',field:'EL Status',old:'Active EL',newVal:'Reclassified RFEP',source:'AZ DOE · approved 3/30'},
+  {id:'r3',student:'David Kim',school:'swlv',type:'Service Update',field:'EL Services',old:'Pull-out ESL 30min/day',newVal:'Push-in Co-teaching',source:'NV DOE · IEP amendment 3/25'},
+  {id:'r4',student:'Marco Reyes',school:'cibolo',type:'New Enrollment',field:'EL Status',old:'Not enrolled',newVal:'Active EL · Expanding (L3)',source:'TX TEA · enrolled 3/31'},
+  {id:'r5',student:'Khalid Osman',school:'cadence',type:'Assessment',field:'WIDA ACCESS Score',old:'3.2 (2024)',newVal:'4.0 (2025)',source:'NV DOE · annual assessment'},
+  {id:'r6',student:'Priya Nair',school:'laveen',type:'Goal Update',field:'Annual EL Goal',old:'Oral language development',newVal:'Academic literacy focus',source:'AZ DOE · ILP amendment 3/29'},
+];
+
+const INGEST_DATA=[
+  {source:'state',icon:'🏛️',title:'AZ Department of Education',meta:'EL roster · 28 students',time:'4 min ago',msg:'3 changes detected'},
+  {source:'state',icon:'🏛️',title:'NV Department of Education',meta:'EL roster · 19 students',time:'4 min ago',msg:'2 changes detected'},
+  {source:'state',icon:'🏛️',title:'TX Education Agency',meta:'EL roster · 16 students',time:'5 min ago',msg:'1 discrepancy flagged'},
+  {source:'school',icon:'🏫',title:'Chandler & Laveen — PowerSchool / IC',meta:'SIS API connected',time:'6 min ago',msg:'Listening for push'},
+  {source:'school',icon:'🏫',title:'Cadence & SW Las Vegas — Skyward/IC',meta:'SIS API connected',time:'6 min ago',msg:'Listening for push'},
+  {source:'school',icon:'🏫',title:'Alamo Ranch & Cibolo — TEAMS/Skyward',meta:'SIS API connected',time:'6 min ago',msg:'Listening for push'},
+];
+
+const PIPE_LOG_TEMPLATE=[
+  {type:'teal',text:'<strong>AZ DOE sync complete</strong> · 28 records reconciled · 3 changes queued for review'},
+  {type:'teal',text:'<strong>NV DOE sync complete</strong> · 19 records · 2 changes queued'},
+  {type:'amber',text:'<strong>TX TEA discrepancy</strong> · Cibolo enrollment mismatch · queued for human review'},
+  {type:'green',text:'<strong>All 7 SIS connections verified</strong> · APIs responding normally'},
+  {type:'green',text:'<strong>5 changes pushed</strong> · Chandler, Laveen, SW Las Vegas SIS updated · confirmed'},
+  {type:'green',text:'<strong>Human review complete</strong> · 5 records approved · push authorized by K. Moreno'},
+];
+
+const LITE_PENDING_TEMPLATE=[
+  {school:'chandler',badge:'urgent',reason:'Amara Osei & Luis Reyes — 2 students hit reclassification deadline in 5 days. State feed updated 2 days ago.',preview:'Amara Osei and Luis Reyes are due for reclassification review by Friday. Please confirm assessments are scheduled.'},
+  {school:'laveen',badge:'urgent',reason:'Mei-Ling Chan — reclassification window closes in 6 days. Last coordinator contact 8 days ago.',preview:"Mei-Ling Chan's reclassification assessment must be completed within 6 days per ADE Title III requirements."},
+  {school:'laveen',badge:'urgent',reason:'Priya Nair — state record updated 14 days ago with no local acknowledgment.',preview:'An ADE state EL record update for Priya Nair from 14 days ago has not been acknowledged in your local SIS. Please review.'},
+  {school:'swlv',badge:'warn',reason:'David Kim — assessment due in 9 days. No coordinator response on record this cycle.',preview:'David Kim requires assessment scheduling before the NV DOE deadline. Please confirm status.'},
+];
+
+const LITE_LOG_TEMPLATE=[
+  {time:'Today\n8:14',type:'green',text:'<strong>Reminder sent</strong> · Surprise, AZ — Fatima Al-Hassan enrollment confirmation'},
+  {time:'Mar 30\n2:01',type:'green',text:'<strong>Reminder sent</strong> · SW Las Vegas, NV — David Kim & Nia Johnson assessment scheduling'},
+  {time:'Mar 28\n9:45',type:'amber',text:'<strong>Escalation sent</strong> · Chandler, AZ — no response after 2 reminders'},
+  {time:'Mar 27\n7:00',type:'green',text:'<strong>Auto-digest sent</strong> · SW Las Vegas, NV — weekly EL status digest'},
+  {time:'Mar 25\n11:30',type:'green',text:'<strong>State pull complete</strong> · 63 students checked · 0 discrepancies'},
+  {time:'Mar 24\n3:15',type:'green',text:'<strong>Reminder sent</strong> · Surprise, AZ — Andres Villanueva services documentation'},
+];
+
+// ═══════════════════════
+// FULL TAB STATE
+// ═══════════════════════
+let reviewItems=[];
+let pushedCount=23;
+let litePending=[];
+let liteSentCount=11;
+let liteUrgentOnly=false;
+let liteSortAsc=true;
+
+function getSchool(id){return SCHOOLS.find(s=>s.id===id);}
+
+// ═══════════════════════
+// ANIMATED PIPELINE CANVAS
+// ═══════════════════════
+const NODES=[
+  {label:'AZ DOE',sub:'State',color:'#4a7fd4',xFrac:.05,yFrac:.2},
+  {label:'NV DOE',sub:'State',color:'#4a7fd4',xFrac:.05,yFrac:.5},
+  {label:'TX TEA',sub:'State',color:'#4a7fd4',xFrac:.05,yFrac:.8},
+  {label:'Nebari',sub:'Ingest',color:'#00b4a0',xFrac:.28,yFrac:.5},
+  {label:'AI',sub:'Reconcile',color:'#9b5de5',xFrac:.50,yFrac:.5},
+  {label:'Review',sub:'Human',color:'#f5a623',xFrac:.72,yFrac:.5},
+  {label:'AZ',sub:'Schools',color:'#1a7a4a',xFrac:.95,yFrac:.2},
+  {label:'NV',sub:'Schools',color:'#1a7a4a',xFrac:.95,yFrac:.5},
+  {label:'TX',sub:'Schools',color:'#1a7a4a',xFrac:.95,yFrac:.8},
+];
+
+let particles=[];
+let animFrame;
+let canvasReady=false;
+
+function initCanvas(){
+  const canvas=document.getElementById('pipelineCanvas');
+  if(!canvas)return;
+  const wrap=canvas.parentElement;
+  const W=wrap.clientWidth;
+  const H=180;
+  canvas.width=W*2;
+  canvas.height=H*2;
+  canvas.style.width=W+'px';
+  canvas.style.height=H+'px';
+  canvasReady=true;
+  spawnParticles();
+  animateCanvas();
+}
+
+function getNodePos(canvas,node){
+  const W=canvas.width,H=canvas.height;
+  return{x:node.xFrac*W,y:node.yFrac*H};
+}
+
+function spawnParticles(){
+  // Paths: left nodes → nebari, nebari → ai, ai → human, human → right nodes
+  const paths=[
+    {from:0,to:3,color:'#4a7fd4'},{from:1,to:3,color:'#4a7fd4'},{from:2,to:3,color:'#4a7fd4'},
+    {from:3,to:4,color:'#00b4a0'},{from:4,to:5,color:'#9b5de5'},
+    {from:5,to:6,color:'#f5a623'},{from:5,to:7,color:'#f5a623'},{from:5,to:8,color:'#f5a623'},
+  ];
+  setInterval(()=>{
+    const path=paths[Math.floor(Math.random()*paths.length)];
+    particles.push({from:path.from,to:path.to,color:path.color,t:0,speed:.006+Math.random()*.005,size:3+Math.random()*2.5});
+  },220);
+}
+
+function animateCanvas(){
+  const canvas=document.getElementById('pipelineCanvas');
+  if(!canvas){return;}
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  const nodePositions=NODES.map(n=>getNodePos(canvas,n));
+  const connections=[[0,3],[1,3],[2,3],[3,4],[4,5],[5,6],[5,7],[5,8]];
+
+  // Draw connection lines
+  connections.forEach(([a,b])=>{
+    const pa=nodePositions[a],pb=nodePositions[b];
+    ctx.beginPath();
+    ctx.moveTo(pa.x,pa.y);
+    ctx.lineTo(pb.x,pb.y);
+    ctx.strokeStyle='rgba(255,255,255,0.1)';
+    ctx.lineWidth=2;
+    ctx.stroke();
+  });
+
+  // Draw nodes
+  const R=22; // node circle radius at 2x
+  NODES.forEach((node,i)=>{
+    const pos=nodePositions[i];
+
+    // Glow halo
+    const grd=ctx.createRadialGradient(pos.x,pos.y,0,pos.x,pos.y,R*2.2);
+    grd.addColorStop(0,node.color+'44');
+    grd.addColorStop(1,'transparent');
+    ctx.beginPath();ctx.arc(pos.x,pos.y,R*2.2,0,Math.PI*2);
+    ctx.fillStyle=grd;ctx.fill();
+
+    // Circle fill
+    ctx.beginPath();ctx.arc(pos.x,pos.y,R,0,Math.PI*2);
+    ctx.fillStyle=node.color+'30';ctx.fill();
+    ctx.strokeStyle=node.color;ctx.lineWidth=2;ctx.stroke();
+
+    // Main label (above center)
+    ctx.fillStyle='rgba(255,255,255,0.92)';
+    ctx.font=`bold 20px Plus Jakarta Sans,sans-serif`;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(node.label,pos.x,pos.y-2);
+
+    // Sub label (below circle)
+    ctx.fillStyle='rgba(255,255,255,0.38)';
+    ctx.font=`16px Plus Jakarta Sans,sans-serif`;
+    ctx.fillText(node.sub,pos.x,pos.y+R+18);
+  });
+
+  // Move & draw particles
+  particles=particles.filter(p=>p.t<=1);
+  particles.forEach(p=>{
+    p.t+=p.speed;
+    const pa=nodePositions[p.from],pb=nodePositions[p.to];
+    const ex=pa.x+(pb.x-pa.x)*p.t;
+    const ey=pa.y+(pb.y-pa.y)*p.t;
+    // Glow trail
+    const grd=ctx.createRadialGradient(ex,ey,0,ex,ey,p.size*4);
+    grd.addColorStop(0,p.color+'bb');
+    grd.addColorStop(1,'transparent');
+    ctx.beginPath();ctx.arc(ex,ey,p.size*3,0,Math.PI*2);
+    ctx.fillStyle=grd;ctx.fill();
+    // Core
+    ctx.beginPath();ctx.arc(ex,ey,p.size,0,Math.PI*2);
+    ctx.fillStyle=p.color;ctx.fill();
+  });
+
+  animFrame=requestAnimationFrame(animateCanvas);
+}
+
+// ═══════════════════════
+// FULL TAB RENDER
+// ═══════════════════════
+function buildReviewQueue(){
+  const el=document.getElementById('reviewQueue');
+  if(!reviewItems.length){
+    el.innerHTML='<div class="empty">All changes reviewed. Push approved changes using the button above.</div>';
+    return;
+  }
+  el.innerHTML=reviewItems.map(r=>{
+    const school=getSchool(r.school);
+    return `<div class="review-item ${r.approved?'approved':''}" id="${r.id}">
+      <div class="review-header">
+        <div class="review-student">${r.student} <span style="font-weight:400;color:var(--text-secondary)">· ${school.name}, ${school.state}</span></div>
+        <span class="badge ${r.approved?'green':'amber'}">${r.type}</span>
+      </div>
+      <div class="review-change">
+        <div class="change-label">Detected Change · Source: ${r.source}</div>
+        <div style="margin-top:4px"><strong style="color:var(--text-secondary)">${r.field}:</strong></div>
+        <div class="change-diff">
+          <span class="change-old">${r.old}</span>
+          <span class="change-arrow">→</span>
+          <span class="change-new">${r.newVal}</span>
+        </div>
+      </div>
+      <div class="review-actions">
+        <button class="btn btn-success btn-sm" onclick="approveChange('${r.id}')">✓ Approve</button>
+        <button class="btn btn-outline btn-sm" onclick="requestInfo('${r.id}')">🏛️ View State Record</button>
+        <button class="btn btn-danger btn-sm" onclick="rejectChange('${r.id}')">✕ Reject</button>
+      </div>
+      <div class="approved-label">✓ Approved — ready to push to ${school.name} ${school.sis}</div>
+    </div>`;
+  }).join('');
+}
+
+function buildIngestFeed(){
+  document.getElementById('ingestFeed').innerHTML=INGEST_DATA.map(item=>`
+    <div class="ingest-item">
+      <div class="ingest-icon ${item.source}">${item.icon}</div>
+      <div class="ingest-body">
+        <div class="ingest-title">${item.title}</div>
+        <div class="ingest-meta">${item.meta} · ${item.time}</div>
+        <div class="ingest-status">
+          <span class="pulse-dot ${item.source==='state'?'teal':'green'}"></span>
+          ${item.msg}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function buildSchoolsGrid(){
+  document.getElementById('schoolsGrid').innerHTML=SCHOOLS.map(s=>`
+    <div class="school-card" id="sc-${s.id}">
+      <div class="school-name">${s.name}</div>
+      <div class="school-state-tag">${s.state} · ${s.sis}</div>
+      <div class="school-sync-row">
+        <span class="dot green"></span>
+        <span style="font-size:10px;color:var(--success)">Connected</span>
+      </div>
+    </div>`).join('');
+}
+
+function buildPipelineLog(){
+  document.getElementById('pipelineLog').innerHTML=PIPE_LOG_TEMPLATE.map(e=>`
+    <li class="log-item">
+      <div class="log-time">Earlier</div>
+      <span class="dot ${e.type}" style="margin-top:4px;flex-shrink:0"></span>
+      <div class="log-text">${e.text}</div>
+    </li>`).join('');
+}
+
+function updateFullStats(){
+  const pending=reviewItems.filter(r=>!r.approved).length;
+  const approved=reviewItems.filter(r=>r.approved).length;
+  document.getElementById('fStatReview').textContent=pending;
+  document.getElementById('fStatApproved').textContent=approved;
+  document.getElementById('fStatPushed').textContent=pushedCount;
+  document.getElementById('reviewBadge').textContent=`${pending} pending`;
+}
+
+// ═══════════════════════
+// FULL TAB INTERACTIONS
+// ═══════════════════════
+function approveChange(id){
+  const item=reviewItems.find(r=>r.id===id);
+  if(!item||item.approved)return;
+  item.approved=true;
+  buildReviewQueue();
+  updateFullStats();
+  const school=getSchool(item.school);
+  addPipeLog('green',`<strong>Approved</strong> · ${item.student} · ${item.type} · queued for push to ${school.name} ${school.sis}`);
+}
+
+function rejectChange(id){
+  const item=reviewItems.find(r=>r.id===id);
+  if(!item)return;
+  const school=getSchool(item.school);
+  addPipeLog('amber',`<strong>Rejected</strong> · ${item.student} · ${item.type} · flagged for coordinator follow-up`);
+  reviewItems=reviewItems.filter(r=>r.id!==id);
+  buildReviewQueue();
+  updateFullStats();
+}
+
+function approveAll(){
+  reviewItems.forEach(r=>{r.approved=true;});
+  buildReviewQueue();
+  updateFullStats();
+  addPipeLog('green',`<strong>All changes approved</strong> · ${reviewItems.length} records ready to push`);
+}
+
+function requestInfo(id){
+  const item=reviewItems.find(r=>r.id===id);
+  if(!item)return;
+  const school=getSchool(item.school);
+
+  // Toggle inline state record panel on the review item
+  const itemEl=document.getElementById(id);
+  const existing=itemEl.querySelector('.state-record-panel');
+  if(existing){existing.remove();return;}
+
+  addPipeLog('teal',`<strong>State record pulled</strong> · ${item.student} · ${item.source}`);
+
+  const stateSystem = item.source.startsWith('AZ') ? 'Arizona Department of Education' : item.source.startsWith('NV') ? 'Nevada Department of Education' : 'Texas Education Agency';
+  const recordId = 'EL-' + Math.floor(100000 + Math.random()*900000);
+  const today = new Date();
+  const updDate = new Date(today - Math.floor(Math.random()*8+2)*86400000);
+  const updStr = updDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
+  const panel=document.createElement('div');
+  panel.className='state-record-panel';
+  panel.style.cssText='margin:10px 0 4px;background:var(--info-light);border:1px solid #b8d0f0;border-radius:8px;overflow:hidden;';
+  panel.innerHTML=`
+    <div style="background:#1a5490;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:11px;font-weight:700;color:#fff;display:flex;align-items:center;gap:6px;">
+        🏛️ Live State Record — ${stateSystem}
+        <span style="background:rgba(255,255,255,.15);border-radius:4px;padding:2px 7px;font-size:9px;letter-spacing:.05em;">CONNECTED</span>
+      </div>
+      <span style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.55);">Record ID: ${recordId}</span>
+    </div>
+    <div style="padding:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="grid-column:1/-1;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--info);margin-bottom:2px;">Student Record</div>
+      <div style="font-size:11px;"><span style="color:var(--text-muted)">Name:</span> <strong>${item.student}</strong></div>
+      <div style="font-size:11px;"><span style="color:var(--text-muted)">School:</span> <strong>${school.name}, ${school.state}</strong></div>
+      <div style="font-size:11px;"><span style="color:var(--text-muted)">SIS:</span> <strong>${school.sis}</strong></div>
+      <div style="font-size:11px;"><span style="color:var(--text-muted)">Last Updated:</span> <strong>${updStr}</strong></div>
+      <div style="grid-column:1/-1;border-top:1px solid #b8d0f0;margin:4px 0;padding-top:8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--info);">Detected Change — ${item.type}</div>
+      <div style="font-size:11px;"><span style="color:var(--text-muted)">Field:</span> <strong>${item.field}</strong></div>
+      <div style="font-size:11px;"><span style="color:var(--text-muted)">Source:</span> <strong>${item.source}</strong></div>
+      <div style="font-size:11px;"><span style="color:var(--text-muted)">Current (State):</span> <span style="color:var(--success);font-weight:600;font-family:'DM Mono',monospace;">${item.newVal}</span></div>
+      <div style="font-size:11px;"><span style="color:var(--text-muted)">In School SIS:</span> <span style="color:var(--flag);font-weight:600;font-family:'DM Mono',monospace;text-decoration:line-through;">${item.old}</span></div>
+      <div style="grid-column:1/-1;font-size:10px;color:var(--text-muted);padding-top:4px;border-top:1px solid #b8d0f0;margin-top:4px;">
+        ⚡ Pulled live from ${stateSystem} API · Nebari normalized · No manual data entry required
+      </div>
+    </div>`;
+  itemEl.querySelector('.review-actions').after(panel);
+}
+
+async function triggerSync(){
+  const btn=document.querySelector('[onclick="triggerSync()"]');
+  btn.disabled=true;btn.textContent='⏳ Syncing...';
+  addPipeLog('teal','<strong>Manual sync triggered</strong> · Querying AZ DOE · NV DOE · TX TEA...');
+  await sleep(800);
+  addPipeLog('teal','<strong>AZ DOE responding</strong> · 28 student records received');
+  await sleep(600);
+  addPipeLog('teal','<strong>NV DOE responding</strong> · 19 student records received');
+  await sleep(600);
+  addPipeLog('teal','<strong>TX TEA responding</strong> · 16 student records received');
+  await sleep(700);
+
+  // Find items that have been pushed or rejected (not in reviewItems) and restore them
+  const currentIds=reviewItems.map(r=>r.id);
+  const missing=REVIEW_TEMPLATE.filter(r=>!currentIds.includes(r.id));
+
+  if(missing.length>0){
+    missing.forEach(r=>{
+      reviewItems.push({...r,approved:false});
+    });
+    buildReviewQueue();
+    updateFullStats();
+    addPipeLog('amber',`<strong>${missing.length} record(s) re-detected from state sync</strong> · Added back to review queue`);
+    showToast(`🔄 Sync pulled ${missing.length} updated record(s) back from state systems`);
+  } else {
+    addPipeLog('green','<strong>Sync complete</strong> · 63 student records checked · All records current');
+    showToast('✓ State sync complete — all records up to date');
+  }
+
+  btn.disabled=false;btn.textContent='🔄 Force Sync';
+}
+
+function openPushModal(){
+  const approved=reviewItems.filter(r=>r.approved);
+  if(!approved.length){
+    alert('No approved changes yet. Approve changes in the review queue first, then push.');
+    return;
+  }
+  const schools=[...new Set(approved.map(r=>getSchool(r.school).name+', '+getSchool(r.school).state))].join(' · ');
+  document.getElementById('modalSummary').innerHTML=`
+    <div class="modal-row"><span class="modal-row-label">Records to update</span><span class="modal-row-val">${approved.length} students</span></div>
+    <div class="modal-row"><span class="modal-row-label">Locations</span><span class="modal-row-val">${schools}</span></div>
+    <div class="modal-row"><span class="modal-row-label">Delivery method</span><span class="modal-row-val">Nebari SIS API — direct write</span></div>
+    <div class="modal-row"><span class="modal-row-label">Authorized by</span><span class="modal-row-val">EL Coordinator (current session)</span></div>
+    <div class="modal-row"><span class="modal-row-label">Reversible?</span><span class="modal-row-val">Requires manual SIS correction</span></div>`;
+  document.getElementById('modalContent').style.display='block';
+  document.getElementById('pushProgress').style.display='none';
+  document.getElementById('pushSuccess').style.display='none';
+  document.getElementById('pushModal').classList.add('active');
+}
+
+async function startPush(){
+  const approved=reviewItems.filter(r=>r.approved);
+  // Hide confirm view, show progress
+  document.getElementById('modalContent').style.display='none';
+  document.getElementById('pushSuccess').style.display='none';
+  const prog=document.getElementById('pushProgress');
+  prog.style.display='flex';
+
+  const steps=[
+    'Authenticating with Nebari API...',
+    'Verifying SIS connections...',
+    ...approved.map(r=>`Pushing ${r.student} → ${getSchool(r.school).name} ${getSchool(r.school).sis}...`),
+    'Confirming write acknowledgments...',
+    'Logging push to audit trail...',
+  ];
+
+  const stepsEl=document.getElementById('pushSteps');
+  const bar=document.getElementById('progressBar');
+  stepsEl.innerHTML=steps.map((s,i)=>`<div class="push-step" id="ps${i}"><div class="step-icon" id="pi${i}" style="font-size:10px">·</div><span>${s}</span></div>`).join('');
+
+  for(let i=0;i<steps.length;i++){
+    const stepEl=document.getElementById(`ps${i}`);
+    const iconEl=document.getElementById(`pi${i}`);
+    stepEl.classList.add('active-step');
+    iconEl.classList.add('active-step');
+    iconEl.style.animation='spin .7s linear infinite';
+    iconEl.textContent='';
+    bar.style.width=`${Math.round(((i+1)/steps.length)*100)}%`;
+    await sleep(i<2?900:650);
+    stepEl.classList.remove('active-step');
+    stepEl.classList.add('done');
+    iconEl.classList.remove('active-step');
+    iconEl.classList.add('done');
+    iconEl.style.animation='none';
+    iconEl.textContent='✓';
+  }
+
+  // Mark schools synced
+  approved.forEach(r=>{
+    const card=document.getElementById(`sc-${r.school}`);
+    if(card){
+      card.classList.add('syncing');
+      setTimeout(()=>{card.classList.remove('syncing');card.classList.add('synced');},600);
+    }
+    addPipeLog('green',`<strong>Pushed</strong> · ${r.student} · ${r.type} → ${getSchool(r.school).name} ${getSchool(r.school).sis}`);
+  });
+
+  pushedCount+=approved.length;
+  reviewItems=reviewItems.filter(r=>!r.approved);
+  buildReviewQueue();
+  updateFullStats();
+
+  prog.style.display='none';
+  const successEl=document.getElementById('pushSuccess');
+  document.getElementById('pushSuccessMsg').textContent=`${approved.length} student records successfully written to school SIS systems via Nebari. Changes are now live.`;
+  successEl.style.display='block';
+  setTimeout(()=>{SCHOOLS.forEach(s=>{const c=document.getElementById(`sc-${s.id}`);if(c)c.classList.remove('synced');});},6000);
+}
+
+function closeModal(){
+  document.getElementById('pushModal').classList.remove('active');
+}
+
+function addPipeLog(type,text){
+  const list=document.getElementById('pipelineLog');
+  const li=document.createElement('li');
+  li.className='log-item new-log';
+  li.innerHTML=`<div class="log-time">Now</div><span class="dot ${type}" style="margin-top:4px;flex-shrink:0"></span><div class="log-text">${text}</div>`;
+  list.prepend(li);
+}
+
+// ═══════════════════════
+// LITE TAB
+// ═══════════════════════
+function buildLiteRoster(data){
+  data=data||STUDENTS;
+  if(liteUrgentOnly)data=data.filter(s=>s.status==='urgent');
+  document.getElementById('liteRosterBody').innerHTML=data.map(s=>{
+    const school=getSchool(s.school);
+    const dc=s.status==='urgent'?'red':s.status==='warn'?'amber':'green';
+    const badge=s.status==='urgent'?'<span class="badge red">⚠ Urgent</span>':s.status==='warn'?'<span class="badge amber">Due Soon</span>':'<span class="badge green">On Track</span>';
+    return `<tr class="${s.status==='urgent'?'flagged':''}">
+      <td><span class="dot ${dc}"></span></td>
+      <td><div class="student-name">${s.name}</div></td>
+      <td><div class="school-loc">${school.name}, ${school.state}</div></td>
+      <td style="color:var(--text-secondary);font-size:11px">${s.level}</td>
+      <td><span class="mono">${s.updated}d ago</span></td>
+      <td><span class="mono ${s.deadline<=7?'red':s.deadline<=14?'amber':'green'}">${s.deadline} days</span></td>
+      <td>${badge}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="viewStudent('${s.name}')">View</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function buildLiteActions(){
+  const el=document.getElementById('liteActionList');
+  if(!litePending.length){el.innerHTML='<div class="empty">No pending reminders. All locations up to date.</div>';return;}
+  el.innerHTML=litePending.map((a,i)=>{
+    const school=getSchool(a.school);
+    return `<div class="action-item" id="la-${i}">
+      <div class="action-school">
+        <span class="dot ${a.badge==='urgent'?'red':'amber'}"></span>
+        ${school.name}, ${school.state}
+        <span class="badge ${a.badge==='urgent'?'red':'amber'}" style="font-size:9px">${a.badge==='urgent'?'Urgent':'Warning'}</span>
+      </div>
+      <div class="action-reason">${a.reason}</div>
+      <div class="email-preview"><strong>To:</strong> el@${school.id}.vertexed.org<br><strong>Re:</strong> EL Compliance — Action Required<br><br>${a.preview}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-xs" onclick="liteSend(${i})">📧 Send</button>
+        <button class="btn btn-outline btn-xs" onclick="liteEdit(${i})">✏ Edit</button>
+        <button class="btn btn-outline btn-xs" onclick="liteDismiss(${i})">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildLiteLog(){
+  document.getElementById('liteLogList').innerHTML=LITE_LOG_TEMPLATE.map(e=>`
+    <li class="log-item">
+      <div class="log-time">${e.time}</div>
+      <span class="dot ${e.type}" style="margin-top:4px;flex-shrink:0"></span>
+      <div class="log-text">${e.text}</div>
+    </li>`).join('');
+}
+
+function updateLiteStats(){
+  document.getElementById('lStatFlag').textContent=litePending.filter(p=>p.badge==='urgent').length;
+  document.getElementById('lStatSent').textContent=liteSentCount;
+  document.getElementById('lPendingBadge').textContent=`${litePending.length} queued`;
+  document.getElementById('lRosterBadge').textContent=`${litePending.filter(p=>p.badge==='urgent').length} flagged`;
+  document.getElementById('lLogBadge').textContent=`${liteSentCount} sent`;
+}
+
+const LITE_SCAN_MSGS=[
+  'Connecting to AZ Department of Education...',
+  'Pulling NV DOE EL roster data...',
+  'Pulling TX Education Agency data...',
+  'Reconciling 63 student records...',
+  'Checking reclassification deadlines...',
+  'Flagging schools requiring contact...',
+  'Building reminder queue...',
+  '✓ Scan complete.'
+];
+
+const LITE_ALL_PENDING=[
+  {school:'chandler',badge:'urgent',reason:'Amara Osei & Luis Reyes — 2 students hit reclassification deadline in 5 days. State feed updated 2 days ago.',preview:'Amara Osei and Luis Reyes are due for reclassification review by Friday. Please confirm assessments are scheduled.'},
+  {school:'laveen',badge:'urgent',reason:'Mei-Ling Chan — reclassification window closes in 6 days. Last coordinator contact 8 days ago.',preview:"Mei-Ling Chan's reclassification assessment must be completed within 6 days per ADE Title III requirements."},
+  {school:'laveen',badge:'urgent',reason:'Priya Nair — state record updated 14 days ago with no local acknowledgment.',preview:'An ADE state EL record update for Priya Nair from 14 days ago has not been acknowledged in your local SIS. Please review.'},
+  {school:'swlv',badge:'warn',reason:'David Kim — assessment due in 9 days. No coordinator response on record this cycle.',preview:'David Kim requires assessment scheduling before the NV DOE deadline. Please confirm status.'},
+  {school:'cibolo',badge:'warn',reason:'Marco Reyes — TEA record shows assessment deadline in 11 days. No coordinator contact this cycle.',preview:'Marco Reyes requires assessment scheduling before the TX TEA deadline. Please confirm status.'},
+  {school:'cadence',badge:'warn',reason:'Khalid Osman — WIDA ACCESS score updated in state system but not yet reflected in local SIS.',preview:'A state assessment score update for Khalid Osman is available and needs to be applied to your local records.'},
+  {school:'alamo',badge:'urgent',reason:'Aisha Traoré — annual EL goal review overdue. State flagged 20 days since last SIS update.',preview:'Aisha Traoré has not had an EL goal review logged in 20 days. Please confirm review is scheduled or completed.'},
+];
+
+async function liteRun(){
+  const btn=document.getElementById('liteRunBtn');
+  const bar=document.getElementById('liteScanBar');
+  const msg=document.getElementById('liteScanMsg');
+  btn.disabled=true;btn.textContent='⏳ Running...';
+  bar.classList.add('active');
+  for(let i=0;i<LITE_SCAN_MSGS.length;i++){
+    msg.textContent=LITE_SCAN_MSGS[i];
+    await sleep(i===LITE_SCAN_MSGS.length-1?300:500);
+  }
+  bar.classList.remove('active');
+
+  // Find any items from the full pool not currently in the pending list and add them
+  const existingReasons=litePending.map(p=>p.reason);
+  const newItems=LITE_ALL_PENDING.filter(p=>!existingReasons.includes(p.reason));
+  newItems.forEach(item=>litePending.push({...item}));
+
+  buildLiteActions();
+
+  // Highlight all newly added items
+  const allItems=document.querySelectorAll('#liteActionList .action-item');
+  const startIdx=litePending.length-newItems.length;
+  for(let i=startIdx;i<litePending.length;i++){
+    if(allItems[i])allItems[i].classList.add('new-action');
+  }
+
+  const pulled=newItems.length;
+  addLiteLog('green',`<strong>Monitor run complete</strong> · 63 students checked · ${litePending.length} reminders queued${pulled>0?' · '+pulled+' new items surfaced':''}`);
+  if(pulled>0){
+    newItems.forEach(item=>{
+      const school=getSchool(item.school);
+      addLiteLog('amber',`<strong>New reminder queued</strong> · ${school.name}, ${school.state} — ${item.reason.split('—')[0].trim()}`);
+    });
+  }
+  updateLiteStats();
+  btn.disabled=false;btn.textContent='▶ Run Monitor';
+}
+
+function liteSend(idx){
+  const a=litePending[idx];
+  const school=getSchool(a.school);
+  const el=document.getElementById(`la-${idx}`);
+  el.style.opacity='.4';el.style.pointerEvents='none';
+  setTimeout(()=>{
+    litePending.splice(idx,1);liteSentCount++;
+    buildLiteActions();updateLiteStats();
+    addLiteLog('green',`<strong>Reminder sent</strong> · ${school.name}, ${school.state} — EL compliance notification`);
+  },400);
+}
+
+function liteSendAll(){
+  if(!litePending.length)return;
+  litePending.forEach(a=>{
+    const school=getSchool(a.school);
+    addLiteLog('green',`<strong>Reminder sent</strong> · ${school.name}, ${school.state} — EL compliance notification`);
+  });
+  liteSentCount+=litePending.length;litePending=[];
+  buildLiteActions();updateLiteStats();
+}
+
+function liteEdit(idx){
+  const a=litePending[idx];
+  const school=getSchool(a.school);
+  // Expand/collapse an inline edit area
+  const itemEl=document.getElementById(`la-${idx}`);
+  const existing=itemEl.querySelector('.inline-editor');
+  if(existing){existing.remove();return;}
+  const ed=document.createElement('div');
+  ed.className='inline-editor';
+  ed.style.cssText='margin-top:8px;background:var(--surface-2);border:1px solid var(--vertex-light);border-radius:7px;padding:10px 12px;';
+  ed.innerHTML=`
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:7px;">Edit Email</div>
+    <div style="font-size:11px;color:var(--text-secondary);margin-bottom:5px;"><strong>To:</strong> el@${school.id}.vertexed.org</div>
+    <textarea style="width:100%;height:72px;font-size:11px;font-family:'DM Mono',monospace;border:1px solid var(--border);border-radius:5px;padding:7px 9px;resize:none;color:var(--text-primary);background:var(--surface);">${a.preview}</textarea>
+    <div style="display:flex;gap:7px;margin-top:8px;">
+      <button class="btn btn-primary btn-xs" onclick="liteSaveEdit(${idx},this)">💾 Save</button>
+      <button class="btn btn-outline btn-xs" onclick="this.closest('.inline-editor').remove()">Cancel</button>
+    </div>`;
+  itemEl.appendChild(ed);
+}
+
+function liteSaveEdit(idx,btn){
+  const ed=btn.closest('.inline-editor');
+  const ta=ed.querySelector('textarea');
+  litePending[idx].preview=ta.value;
+  ed.remove();
+  buildLiteActions();
+  showToast('✓ Email updated');
+}
+
+function viewStudent(name){
+  const student=STUDENTS.find(s=>s.name===name);
+  if(!student)return;
+  const school=getSchool(student.school);
+
+  // Find the row in the table and toggle an inline detail panel below it
+  const rows=document.querySelectorAll('#liteRosterBody tr');
+  let targetRow=null;
+  rows.forEach(row=>{
+    const nameCell=row.querySelector('.student-name');
+    if(nameCell&&nameCell.textContent===name)targetRow=row;
+  });
+  if(!targetRow)return;
+
+  // If panel already open, close it
+  const nextRow=targetRow.nextElementSibling;
+  if(nextRow&&nextRow.classList.contains('state-record-row')){
+    nextRow.remove();
+    return;
+  }
+
+  const stateSystem=school.state==='AZ'?'Arizona Department of Education':school.state==='NV'?'Nevada Department of Education':'Texas Education Agency';
+  const recordId='EL-'+Math.floor(100000+Math.random()*900000);
+  const today=new Date();
+  const updDate=new Date(today-student.updated*86400000);
+  const updStr=updDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const deadlineDate=new Date(today.getTime()+student.deadline*86400000);
+  const deadlineStr=deadlineDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const statusColor=student.status==='urgent'?'var(--flag)':student.status==='warn'?'var(--warn)':'var(--success)';
+  const statusLabel=student.status==='urgent'?'ACTION REQUIRED':student.status==='warn'?'DUE SOON':'ON TRACK';
+
+  const tr=document.createElement('tr');
+  tr.className='state-record-row';
+  tr.innerHTML=`<td colspan="8" style="padding:0;border-bottom:2px solid var(--vertex-light);">
+    <div style="background:var(--info-light);border-top:1px solid #b8d0f0;">
+      <div style="background:#1a5490;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-size:11px;font-weight:700;color:#fff;display:flex;align-items:center;gap:7px;">
+          🏛️ Live State Record — ${stateSystem}
+          <span style="background:rgba(255,255,255,.15);border-radius:4px;padding:2px 7px;font-size:9px;letter-spacing:.05em;">CONNECTED</span>
+        </div>
+        <span style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.5);">Record ID: ${recordId}</span>
+      </div>
+      <div style="padding:13px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+        <div>
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:3px;">Student</div>
+          <div style="font-size:12px;font-weight:700;">${student.name}</div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:3px;">School · SIS</div>
+          <div style="font-size:12px;font-weight:600;">${school.name}, ${school.state}</div>
+          <div style="font-size:10px;color:var(--text-muted);font-family:'DM Mono',monospace;">${school.sis}</div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:3px;">EL Level (State)</div>
+          <div style="font-size:12px;font-weight:600;">${student.level}</div>
+          <div style="font-size:10px;color:var(--text-muted);font-family:'DM Mono',monospace;">Updated: ${updStr}</div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:3px;">Compliance Status</div>
+          <div style="font-size:11px;font-weight:700;color:${statusColor};">${statusLabel}</div>
+          <div style="font-size:10px;color:var(--text-muted);font-family:'DM Mono',monospace;">Deadline: ${deadlineStr}</div>
+        </div>
+        <div style="grid-column:1/-1;border-top:1px solid #b8d0f0;padding-top:9px;margin-top:2px;font-size:10px;color:var(--text-muted);">
+          ⚡ Pulled live from ${stateSystem} API · ${student.updated} day${student.updated!==1?'s':''} since last state update · ${student.deadline} day${student.deadline!==1?'s':''} until next compliance deadline
+        </div>
+      </div>
+    </div>
+  </td>`;
+  targetRow.after(tr);
+  addLiteLog('teal',`<strong>State record pulled</strong> · ${name} · ${school.name}, ${school.state} · ${stateSystem}`);
+}
+
+function liteExport(){
+  const rows=[['Student','Location','EL Level','Days Since Update','Days to Deadline','Status'],...STUDENTS.map(s=>{const sc=getSchool(s.school);return[s.name,sc.name+' '+sc.state,s.level,s.updated,s.deadline,s.status];})];
+  const csv=rows.map(r=>r.join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='EL_Roster_Compliance_Report.csv';a.click();
+  URL.revokeObjectURL(url);
+  showToast('⬇ EL_Roster_Compliance_Report.csv downloaded');
+}
+
+function liteDismiss(idx){litePending.splice(idx,1);buildLiteActions();updateLiteStats();}
+
+function liteFilter(){
+  liteUrgentOnly=!liteUrgentOnly;
+  buildLiteRoster();
+  document.querySelector('[onclick="liteFilter()"]').textContent=liteUrgentOnly?'✕ Show All':'🔺 Urgent Only';
+}
+
+function liteFilterReset(){liteUrgentOnly=false;buildLiteRoster();document.querySelector('[onclick="liteFilter()"]').textContent='🔺 Urgent Only';}
+
+function liteSort(){
+  const sorted=[...STUDENTS].sort((a,b)=>liteSortAsc?a.deadline-b.deadline:b.deadline-a.deadline);
+  liteSortAsc=!liteSortAsc;buildLiteRoster(sorted);
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+function addLiteLog(type,text){
+  const list=document.getElementById('liteLogList');
+  const now=new Date();
+  const ti=`Today\n${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const li=document.createElement('li');
+  li.className='log-item new-log';
+  li.innerHTML=`<div class="log-time">${ti}</div><span class="dot ${type}" style="margin-top:4px;flex-shrink:0"></span><div class="log-text">${text}</div>`;
+  list.prepend(li);
+}
+
+// ═══════════════════════
+// RESET
+// ═══════════════════════
+function resetDemo(){
+  if(!confirm('Reset the demo to its original state? All approvals, sends, and pushes will be cleared.'))return;
+  // Full tab
+  reviewItems=REVIEW_TEMPLATE.map(r=>({...r,approved:false}));
+  pushedCount=23;
+  buildReviewQueue();
+  buildPipelineLog();
+  updateFullStats();
+  SCHOOLS.forEach(s=>{const c=document.getElementById(`sc-${s.id}`);if(c){c.classList.remove('synced','syncing');}});
+
+  // Lite tab
+  litePending=LITE_PENDING_TEMPLATE.map(p=>({...p}));
+  liteSentCount=11;
+  liteUrgentOnly=false;
+  liteSortAsc=true;
+  buildLiteRoster();
+  buildLiteActions();
+  buildLiteLog();
+  updateLiteStats();
+  document.querySelector('[onclick="liteFilter()"]').textContent='🔺 Urgent Only';
+  document.getElementById('liteRunBtn').textContent='▶ Run Monitor';
+  document.getElementById('liteRunBtn').disabled=false;
+}
+
+// ═══════════════════════
+// TAB SWITCH
+// ═══════════════════════
+function switchTab(tab,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  btn.classList.add('active');
+  if(tab==='full'&&canvasReady){cancelAnimationFrame(animFrame);animateCanvas();}
+  else if(tab==='full'&&!canvasReady){setTimeout(initCanvas,50);}
+  else{cancelAnimationFrame(animFrame);}
+}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+// ═══════════════════════
+// INIT
+// ═══════════════════════
+reviewItems=REVIEW_TEMPLATE.map(r=>({...r,approved:false}));
+litePending=LITE_PENDING_TEMPLATE.map(p=>({...p}));
+
+buildReviewQueue();
+buildIngestFeed();
+buildSchoolsGrid();
+buildPipelineLog();
+updateFullStats();
+
+buildLiteRoster();
+buildLiteActions();
+buildLiteLog();
+updateLiteStats();
+
+setTimeout(initCanvas,100);
+window.addEventListener('resize',()=>{cancelAnimationFrame(animFrame);canvasReady=false;setTimeout(initCanvas,100);});
+</script>
+</body>
+</html>
